@@ -4,6 +4,8 @@ import functions as fun
 from bot import bot as b
 from tornado.ioloop import PeriodicCallback, IOLoop
 
+# This is an unnecessary function that checks a file that contains the current song 
+# playing on stream for changes and then sends it to the chat.
 def nowplaying():
 	global np, t, tprev, npprev
 	np = fun.now_playing()

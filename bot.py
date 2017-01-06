@@ -118,11 +118,11 @@ class bot():
 						else:
 							self.options[s](sender)
 					
-					# if order is false and pause is true
+					# No arguments to be passed to function
 					else:
 						self.options[s]()
 						
-				# If command should be added to the queue
+				# If command should be added to the queue [This function may be added later]
 				else:
 					print("Not sure what to do with command {}. Make sure it's added to self.immediate".format(s))
 					
