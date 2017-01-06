@@ -27,7 +27,8 @@ MONEYSTEP = 20
 # Time in seconds to wait between chat messages. 0 to disable
 CHATTIMER = 300
 
-CHATMESSAGES = ["Chat commands can be listed by typing !commands, and are detailed below the stream.",
-				"This bot and the interactive bot were both programmed in Python and will be hosted on github upon completion.",
-				"My favorite command is !tts",
-				"Please leave any suggestions for commands or games by typing !suggest <message>"]
+CHATMESSAGES = ["Chat commands can be listed by typing !commands.",
+				"This chat bot was programmed with Python 3 https://github.com/WillPiledriver/beam-pileborg-chatbot",
+				"My favorite command is !markov",
+				"Please leave any suggestions for commands or games by typing !suggest <message>",
+				"An interactive bot and this chat bot are currently under development and can be accessed on github: https://github.com/WillPiledriver"]
