@@ -86,7 +86,18 @@ class bot():
 					else:
 						self.send_whisper(sender, "There is a {} second cooldown on using {}. {} seconds left in the cooldown.".format(cooldown[0], s, int(cooldown[0] - (t-cooldown[1]))))
 						return
-				
+						
+				# if the command is a mod only command, check if sender has permission		
+				isMod = False
+				if s in self.modcommands:
+					for acceptedroles in ["Mod", "Owner"]:
+						if acceptedroles in self.userdata[sender.lower()]["userRoles"]:
+							isMod = True
+							break
+					if not isMod:
+						print("{} tried to use command {} without correct permissions.".format(sender, s))
+						return
+							
 				# if command should be processed immediately
 				if s in self.immediate:
 					itsplit = s.split("x")
@@ -124,7 +135,7 @@ class bot():
 						
 				# If command should be added to the queue [This function may be added later]
 				else:
-					print("Not sure what to do with command {}. Make sure it's added to self.immediate".format(s))
+					print("Not sure what to do with command {}. Make sure it's added to self.immediate or another".format(s))
 					
 	def filtermessage(self, packet):
 		if "data" in packet:
