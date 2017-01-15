@@ -1,10 +1,11 @@
-import random, markovify, glob, time, requests, json
+import random, markovify, glob, time, requests, json, datetime, config
 
 
 class commands:
 	
-	def __init__(self, chathandle=None):
-		self.ch = chathandle
+	def __init__(self, bothandle=None):
+		self.bh = bothandle
+		self.ch = bothandle.chat
 		
 
 	def send_message(self, msg):
@@ -83,3 +84,22 @@ class commands:
 			print("Forbidden response from urban API server. Most likely an incorrect API key. Check commands.py")
 		else:
 			print("Response was {}".format(response.status_code))
+			
+	def checktime(self, user):
+		user = user.lower()
+		if user in self.bh.userdata:
+			return str(datetime.timedelta(seconds=(self.bh.userdata[user]["timeunits"]*config.MONEYUPDATE)))
+		else:
+			return 0
+		
+	def telltime(self, sender, message):
+		if message not in self.bh.userdata:
+			x = self.checktime(sender)
+			user = sender
+		else:
+			x = self.checktime(message)
+			user = message
+		if x == 0:
+			self.send_message("User data for {} was not found".format(user))
+		else:
+			self.send_message("{} has spent {} in this channel".format(user, x))

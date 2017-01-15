@@ -15,13 +15,13 @@ class bot():
 		
 		
 		self.chat = chathandle
-		com = commands(chathandle)
+		com = commands(self)
 		
 		# self.options is a dict with keys being all available commands and
 		# the value being the def to call when command is received
 		
 		self.options = {"!markov": com.markov, "!d20" : com.d20, ("!" + self.moneyname): self.tellmoney, "!8ball": com.eightball, "!skipsong": self.skipsong,
-		"!suggest": com.suggest, "!time":self.telltime, "!urban": com.urban, "!tts": self.text2speech,
+		"!suggest": com.suggest, "!time":com.telltime, "!urban": com.urban, "!tts": self.text2speech,
 		"!commands": self.sendcommands, "!testmod": self.testmod}
 		
 		# self.cooldowns is a list of tuples with the keys being the name of the command and the tuple being (cooldown, lasttimeactivated)
@@ -135,7 +135,7 @@ class bot():
 						
 				# If command should be added to the queue [This function may be added later]
 				else:
-					print("Not sure what to do with command {}. Make sure it's added to self.immediate or another".format(s))
+					print("Not sure what to do with command {}. Make sure it's added to self.immediate or another dict variable in the init def".format(s))
 					
 	def filtermessage(self, packet):
 		if "data" in packet:
@@ -255,25 +255,6 @@ class bot():
 			return self.userdata[user][self.moneyname]
 		else:
 			return 0
-	
-	def checktime(self, user):
-		user = user.lower()
-		if user in self.userdata:
-			return str(datetime.timedelta(seconds=(self.userdata[user]["timeunits"]*config.MONEYUPDATE)))
-		else:
-			return 0
-		
-	def telltime(self, sender, message):
-		if message not in self.userdata:
-			x = self.checktime(sender)
-			user = sender
-		else:
-			x = self.checktime(message)
-			user = message
-		if x == 0:
-			self.chat.message("User data for {} was not found".format(user))
-		else:
-			self.chat.message("{} has spent {} in this channel".format(user, x))
 		
 	def skipsong(self, user, whisper=False):
 		if(self.chat):
