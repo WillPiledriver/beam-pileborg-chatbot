@@ -28,5 +28,4 @@ For the example commands, there are a few unnecessary dependencies such as PyKey
 
 ###Required dependencies
 
-[Tornado](https://pypi.python.org/pypi/tornado "Pypi Tornado") is needed for this program.
-threading, datetime, re, socket, requests are also needed.
+[Tornado](https://pypi.python.org/pypi/tornado "Pypi Tornado") and requests are needed for this program.
