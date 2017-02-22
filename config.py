@@ -28,7 +28,6 @@ MONEYSTEP = 20
 CHATTIMER = 300
 
 CHATMESSAGES = ["Chat commands can be listed by typing !commands.",
-				"This chat bot was programmed with Python 3 https://github.com/WillPiledriver/beam-pileborg-chatbot",
 				"My favorite command is !markov",
 				"Please leave any suggestions for commands or games by typing !suggest <message>",
 				"An interactive bot and this chat bot are currently under development and can be accessed on github: https://github.com/WillPiledriver"]
