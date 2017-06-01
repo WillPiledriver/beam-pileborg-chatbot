@@ -3,15 +3,13 @@
 BEAM_ADDR = 'https://beam.pro'
 
 # Username of the account.
-USERNAME = 'username'
+USERNAME = ''
 
 # Password of the account.
-PASSWORD = 'password'
+PASSWORD = ''
 
 # The id of the channel you want to connect to.
-# ID can be found by going to https://beam.pro/api/v1/channels/%USERNAME%?fields=id 
-# just replace %USERNAME% with the username of the channel
-CHANNEL = 0
+CHANNEL = 
 
 # Name of the currency you want to use
 MONEYNAME = "caps"
@@ -20,14 +18,14 @@ MONEYNAME = "caps"
 MONEYUPDATE = 60
 
 # Amount of money you want users to gain every update
-MONEYSTEP = 20
+MONEYSTEP = 60
 
 
 
 # Time in seconds to wait between chat messages. 0 to disable
-CHATTIMER = 300
+CHATTIMER = 600
 
-CHATMESSAGES = ["Chat commands can be listed by typing !commands.",
-				"My favorite command is !markov",
-				"Please leave any suggestions for commands or games by typing !suggest <message>",
-				"An interactive bot and this chat bot are currently under development and can be accessed on github: https://github.com/WillPiledriver"]
+CHATMESSAGES = ["Chat commands can be listed by typing !commands, and are detailed below the stream.",
+				"This bot was programmed in Python and can be found at https://github.com/WillPiledriver/beam-pileborg-chatbot",
+				"My favorite command is !tts",
+				"Please leave any suggestions for commands or games by typing !suggest <message>"]
