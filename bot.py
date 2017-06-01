@@ -22,7 +22,7 @@ class bot():
 		
 		self.options = {"!markov": com.markov, "!d20" : com.d20, ("!" + self.moneyname): self.tellmoney, "!8ball": com.eightball, "!skipsong": self.skipsong,
 		"!suggest": com.suggest, "!time":com.telltime, "!urban": com.urban, "!tts": self.text2speech,
-		"!commands": self.sendcommands, "!testmod": self.testmod, "!gift": com.addMoney, "!so": com.shoutout}
+		"!commands": self.sendcommands, "!testmod": self.testmod}
 		
 		# self.cooldowns is a list of tuples with the keys being the name of the command and the tuple being (cooldown, lasttimeactivated)
 		self.cooldowns = {"!tts": (30, time.time()),
@@ -30,7 +30,7 @@ class bot():
 						"!markov": (5, 0)}
 						
 		# self.modcommands is an array of commands that only mods can use
-		self.modcommands = ["!testmod", "!gift", "!so"]
+		self.modcommands = ["!testmod"]
 		
 		# populate self.legal with the keys from self.options	
 		self.legal = []
@@ -40,13 +40,13 @@ class bot():
 		self.iterated = []
 		
 		# self.sendercommands is an array of commands that need a sender to be passed
-		self.sendercommands = [("!" + self.moneyname), "!skipsong", "!tts", "!commands", "!testmod", "!gift"]
+		self.sendercommands = [("!" + self.moneyname), "!skipsong", "!tts", "!commands", "!testmod"]
 		
 		# self.immediate is an array of commands the bot will always act on immediately
 		self.immediate = ["!markov", "!d20", "!8ball", "!joke", "!commands", "!testmod"]
 		
 		# self.argumented is an array of commands that have one or more arguments
-		self.argumented = ["!suggest", "!time", "!urban", "!tts", "!gift", "!so"]
+		self.argumented = ["!suggest", "!time", "!urban", "!tts"]
 		
 		for s in self.sendercommands: self.immediate.append(s)
 		for s in self.argumented: self.immediate.append(s)
@@ -83,18 +83,14 @@ class bot():
 					cooldown = self.cooldowns[s]
 					if t-cooldown[1] > cooldown[0]:
 						self.cooldowns[s] = (cooldown[0], time.time())
-						pass
 					else:
 						self.send_whisper(sender, "There is a {} second cooldown on using {}. {} seconds left in the cooldown.".format(cooldown[0], s, int(cooldown[0] - (t-cooldown[1]))))
 						return
 						
 				# if the command is a mod only command, check if sender has permission		
 				isMod = False
-
 				if s in self.modcommands:
 					for acceptedroles in ["Mod", "Owner"]:
-						if sender.lower() not in self.userdata:
-							break
 						if acceptedroles in self.userdata[sender.lower()]["userRoles"]:
 							isMod = True
 							break
@@ -144,8 +140,6 @@ class bot():
 	def filtermessage(self, packet):
 		if "data" in packet:
 			data = packet["data"]
-		else:
-			data = None
 		# other packets
 
 		if "type" in packet:
@@ -202,18 +196,16 @@ class bot():
 ##=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=USER STUFF=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=##
 	def add_money_to_users(self, users):
 		for u in users.keys():
-			ul = u.lower()
-			if ul in self.userdata:
-				self.userdata[ul][self.moneyname] += self.moneystep
-				self.userdata[ul]["timeunits"] += 1
-				self.userdata[ul]["userRoles"] = users[u]
+			if u in self.userdata:
+				self.userdata[u][self.moneyname] += self.moneystep
+				self.userdata[u]["timeunits"] += 1
+				self.userdata[u]["userRoles"] = users[u]
 			else:
 				self.userdata.update(
-					{ul:{
-						self.moneyname : self.moneystep,
-						"timeunits": 1,
-						"userRoles": users[u],
-						"properName": u
+					{u.lower():{
+					self.moneyname : self.moneystep,
+					"timeunits": 1,
+					"userRoles": users[u]
 					}}
 				)
 		self.write_userdata()
@@ -238,8 +230,6 @@ class bot():
 	def testmod(self, sender):
 		if sender.lower() in self.userdata:
 			self.send_message("{} has user roles {}".format(sender, self.userdata[sender.lower()]["userRoles"]))
-
-
 			
 		
 ##=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=MONEY COMMANDS=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=##
@@ -267,7 +257,6 @@ class bot():
 			return 0
 		
 	def skipsong(self, user, whisper=False):
-		user = user.lower()
 		if(self.chat):
 			cost = 100
 		else:
@@ -288,11 +277,10 @@ class bot():
 			
 
 	def text2speech(self, user, msg):
-		self.dothread(self.t2s, (user.lower(), msg))
+		self.dothread(self.t2s, (user, msg))
 
 		
 	def t2s(self, user, msg):
-		user = user.lower()
 		if len(msg) > 5:
 				
 			if(self.chat):
@@ -305,7 +293,7 @@ class bot():
 				self.es.say("{} said {}".format(user, msg))
 				self.userdata[user][self.moneyname] -= cost
 			else:
-				self.send_whisper(user, "You don't have enough {} to tts (need {}).".format(self.moneyname, cost))
+				self.send_whisper(user, "You don't have enough {} to skip the song (need {}).".format(self.moneyname, cost))
 		else:
 			self.send_whisper(user, "Your message was not long enough")
 

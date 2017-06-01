@@ -38,16 +38,27 @@ class commands:
 		self.send_message("You rolled a " + str(random.randint(1, 20)))
 		
 	def eightball(self):
+		r = random.randint(1,8)
 		
-		reply = ["It is certain",
-				 "Outlook good",
-				 "You may rely on it",
-				 "Ask again later",
-				 "Concentrate and ask again",
-				 "Reply hazy, try again",
-				 "My reply is no",
-				 "My sources say no"]
-		self.send_message(reply[random.randint(0,7)])
+		
+		if r == 1:
+			answer = "It is certain"
+		elif r == 2:
+			answer = "Outlook good"
+		elif r == 3:
+			answer = "You may rely on it"
+		elif r == 4:
+			answer = "Ask again later"
+		elif r == 5:
+			answer = "Concentrate and ask again"
+		elif r == 6:
+			answer = "Reply hazy, try again"
+		elif r == 7:
+			answer = "My reply is no"
+		else:
+			answer = "My sources say no"
+			
+		self.send_message(answer)
 		
 	def suggest(self, sender, msg):
 		if len(msg) > 5:
@@ -60,13 +71,13 @@ class commands:
 		
 	def urban(self, sender, msg):
 		response = requests.get("https://mashape-community-urban-dictionary.p.mashape.com/define?term={}".format(msg), headers={
-								"X-Mashape-Key": "YOUR URBAN DICTIONARY API KEY",
+								"X-Mashape-Key": "YOUR API KEY FROM MASHAPES URBAN API",
 								"Accept": "text/plain"})
 		if response.status_code == 200:
 			response = json.loads(response.content.decode('utf-8'))
 			if len(response["list"]) > 0:
 				response = response["list"][0]["definition"]
-				self.send_message("@{}: {}".format(sender, response))
+				self.send_message("{}: {}".format(sender, response))
 			else:
 				self.send_message("No definitition found for {}".format(msg))
 		elif response.status_code == 403:
@@ -92,32 +103,3 @@ class commands:
 			self.send_message("User data for {} was not found".format(user))
 		else:
 			self.send_message("{} has spent {} in this channel".format(user, x))
-
-	def addMoney(self, sender, message):
-		message = message.split(" ")
-		if len(set(["Owner", "Mod"]) & set(self.bh.userdata[sender.lower()]["userRoles"])) > 0:
-			if len(message) >= 2:
-				rcv = message[0].lower()
-				if rcv.lower() not in self.bh.userdata:
-					self.send_whisper(sender, "You gave an invalid username.")
-					return
-				add = message[1]
-				if add.isdigit():
-					add = int(add)
-				else:
-					self.send_whisper(sender, "You gave an invalid number.")
-					return
-
-				self.bh.userdata[rcv][self.bh.moneyname] += add
-				self.send_message("{} {} were gifted to {}".format(add, self.bh.moneyname, rcv))
-
-			else:
-				self.send_whisper(sender, "Command must be used like !gift <recipient> <money>")
-		else:
-			self.send_whisper(sender, "You do not have permission to use this command.")
-
-	def shoutout(self, sender, msg):
-		if len(set(["Owner", "Mod"]) & set(self.bh.userdata[sender.lower()]["userRoles"])) > 0:
-			self.send_message("Shout out to @{}. Give them a follow http://mixer.com/{}".format(msg, msg))
-		else:
-			self.send_whisper(sender, "You do not have permission to use this command.")

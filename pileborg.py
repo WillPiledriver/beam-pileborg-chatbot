@@ -20,6 +20,7 @@ def nowplaying():
 def addmoney():
 	global chat, ph
 	users = chat.get_users()
+	
 	##ADD MONEY
 	ph.add_money_to_users(users)
 	
@@ -34,11 +35,7 @@ if __name__ == "__main__":
 	tprev = time.time()
 	npprev = fun.now_playing()
 	chats = config.CHATMESSAGES[:]
-
-	if npprev is not None:
-		print("Now playing: " + npprev)
-	else:
-		print("Song not playing.")
+	print(npprev)
 	
 	chat = create(config)
 	ph = b(chat)
